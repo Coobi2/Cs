@@ -6,7 +6,10 @@ const UI = {
         t.innerText = msg;
         t.classList.remove('hidden');
         t.classList.add('show');
-        setTimeout(() => { t.classList.remove('show'); t.classList.add('hidden'); }, 3000);
+        setTimeout(() => { 
+            t.classList.remove('show'); 
+            t.classList.add('hidden'); 
+        }, 3000);
     },
 
     navigate: (route) => {
@@ -84,7 +87,7 @@ const UI = {
             const totalClass = totalGain >= 0 ? 'green' : 'red';
 
             posHtml += `
-                <div class="position-row" ontouchstart="UI.startSwipe(event, '${p.sym}')" onclick="UI.renderQuote('${p.sym}')">
+                <div class="position-row" onclick="UI.renderQuote('${p.sym}')">
                     <div>
                         <div class="sym">${p.sym}</div>
                         <div class="desc">${p.desc}</div>
@@ -223,9 +226,5 @@ const UI = {
 
         html += `</div>`;
         document.getElementById('main-view').innerHTML = html;
-    },
-
-    startSwipe: (e, sym) => {
-        // Simplified swipe logic for demo
     }
 };
