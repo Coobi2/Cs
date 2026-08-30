@@ -7,28 +7,40 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0b1f3a">
     <title>Schwab</title>
-
-    <link rel="icon" type="image/png" href="unnamed.png">
-
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="unnamed.png">
+    <link rel="apple-touch-icon" href="tallyup.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
     <div id="app-root">
-        <!-- FIX: Removed 'hidden' class so auth overlay shows on launch -->
-        <div id="biometric-overlay" class="overlay">
-            <div class="bio-content">
-                <div class="bio-icon"></div>
-                <h2>Authentication Required</h2>
-                <p id="bio-prompt">Use Face ID to unlock</p>
-                <button id="bio-btn" class="schwab-btn-primary">Authenticate</button>
-                <button id="bio-fallback" class="schwab-btn-link">Enter Password</button>
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen login-screen">
+            <div class="login-header">
+                <div class="schwab-logo-login"></div>
+                <h2>Welcome back</h2>
+                <p>Log in to your Schwab account</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="input-group">
+                    <label>Login ID</label>
+                    <input type="email" id="login-email" placeholder="Email or Login ID" autocomplete="username" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
+                </div>
+                <button id="login-btn" class="schwab-btn-primary">Log In</button>
+                <div class="login-options">
+                    <a href="#">Forgot password?</a>
+                </div>
             </div>
         </div>
 
+        <!-- Privacy Overlay -->
         <div id="privacy-overlay" class="overlay hidden">
             <div class="privacy-content">
                 <div class="schwab-logo-privacy"></div>
@@ -36,8 +48,10 @@
             </div>
         </div>
 
+        <!-- Toast -->
         <div id="toast" class="toast hidden"></div>
 
+        <!-- Bottom Navigation -->
         <nav id="bottom-nav" class="hidden">
             <button class="nav-item active" data-route="dashboard">
                 <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
@@ -45,7 +59,7 @@
             </button>
             <button class="nav-item" data-route="positions">
                 <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4V5zm0 6h16v2H4v-2zm0 6h16v2H4v-2z"/></svg>
-                <span>Positions</span>
+            <span>Positions</span>
             </button>
             <button class="nav-item" data-route="trade">
                 <svg viewBox="0 0 24 24"><path d="M12 2L2 12h7v8h6v-8h7L12 2z"/></svg>
