@@ -27,14 +27,8 @@ html, body {
   color: var(--text-main);
 }
 
-body::-webkit-scrollbar, .scrollable::-webkit-scrollbar {
-  display: none;
-}
-
-body, .scrollable {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+body::-webkit-scrollbar, .scrollable::-webkit-scrollbar { display: none; }
+body, .scrollable { -ms-overflow-style: none; scrollbar-width: none; }
 
 #app-root {
   height: 100vh;
@@ -51,9 +45,55 @@ body, .scrollable {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 70px;
+  /* FIX: Add safe area inset for notch/dynamic island */
+  padding-top: env(safe-area-inset-top);
+}
+#main-view::-webkit-scrollbar { display: none; }
+
+/* Login Screen */
+.login-screen {
+  background: white;
+  height: 100vh;
+  padding: 20px;
+  padding-top: calc(env(safe-area-inset-top) + 60px);
+  display: flex;
+  flex-direction: column;
 }
 
-#main-view::-webkit-scrollbar { display: none; }
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.schwab-logo-login {
+  width: 60px;
+  height: 60px;
+  background: var(--schwab-blue);
+  border-radius: 12px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 32px;
+}
+.schwab-logo-login::after { content: 'S'; }
+
+.login-header h2 { font-size: 24px; margin-bottom: 8px; }
+.login-header p { color: var(--text-secondary); font-size: 14px; }
+
+.login-form { max-width: 400px; margin: 0 auto; width: 100%; }
+
+.login-options {
+  text-align: center;
+  margin-top: 20px;
+}
+.login-options a {
+  color: var(--schwab-blue);
+  text-decoration: none;
+  font-size: 14px;
+}
 
 /* Bottom Navigation */
 #bottom-nav {
@@ -68,6 +108,7 @@ body, .scrollable {
   justify-content: space-around;
   align-items: center;
   z-index: 100;
+  /* FIX: Add safe area inset for home indicator */
   padding-bottom: env(safe-area-inset-bottom);
 }
 
@@ -83,25 +124,16 @@ body, .scrollable {
   gap: 4px;
   flex: 1;
   cursor: pointer;
-  transition: color 0.2s;
 }
 
-.nav-item svg {
-  width: 24px;
-  height: 24px;
-  fill: currentColor;
-}
-
-.nav-item.active {
-  color: var(--schwab-blue);
-}
+.nav-item svg { width: 24px; height: 24px; fill: currentColor; }
+.nav-item.active { color: var(--schwab-blue); }
 
 /* Screens */
 .screen {
   padding: 20px;
   animation: slideIn 0.3s ease;
 }
-
 @keyframes slideIn {
   from { opacity: 0; transform: translateX(20px); }
   to { opacity: 1; transform: translateX(0); }
@@ -110,9 +142,11 @@ body, .scrollable {
 .header {
   background: var(--schwab-navy);
   color: white;
-  padding: 60px 20px 20px;
+  padding: 20px 20px 20px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
+  /* FIX: Add padding for top safe area */
+  padding-top: calc(env(safe-area-inset-top) + 40px);
 }
 
 .header h1 { font-size: 24px; margin-bottom: 10px; }
@@ -146,29 +180,17 @@ body, .scrollable {
   align-items: center;
   color: white;
   backdrop-filter: blur(10px);
-  transition: opacity 0.3s;
-}
-
-.overlay.hidden { display: none; }
-
-.bio-content { text-align: center; }
-.bio-icon {
-  width: 80px; height: 80px; border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  margin: 0 auto 20px;
-  border: 2px solid var(--schwab-blue);
-  position: relative;
-}
-.bio-icon::after {
-  content: ''; position: absolute;
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  border: 2px solid white;
-  top: 15px; left: 15px;
 }
 
 #privacy-overlay { background: var(--schwab-navy); }
 .privacy-content { text-align: center; color: rgba(255,255,255,0.6); }
+.schwab-logo-privacy {
+  width: 60px; height: 60px; background: var(--schwab-blue);
+  border-radius: 12px; margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 700; font-size: 32px;
+}
+.schwab-logo-privacy::after { content: 'S'; }
 
 .schwab-btn-primary {
   background: var(--schwab-blue);
@@ -194,9 +216,7 @@ body, .scrollable {
 }
 
 /* Inputs & Forms */
-.input-group {
-  margin-bottom: 20px;
-}
+.input-group { margin-bottom: 20px; }
 .input-group label {
   display: block;
   font-size: 14px;
@@ -233,10 +253,12 @@ body, .scrollable {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 60px 20px 20px;
+  padding: 20px 20px 20px;
   background: var(--card-bg);
   border-bottom: 1px solid var(--border-color);
   position: sticky; top: 0; z-index: 10;
+  /* FIX: Add safe area padding */
+  padding-top: calc(env(safe-area-inset-top) + 20px);
 }
 .title-bar h2 { font-size: 22px; }
 
@@ -244,7 +266,7 @@ body, .scrollable {
   display: flex;
   justify-content: space-between;
   background: var(--schwab-navy);
-  padding: 10px 20px;
+  padding: 15px 20px;
   color: white;
   font-size: 12px;
 }
@@ -260,29 +282,11 @@ body, .scrollable {
   padding: 15px 20px;
   border-bottom: 1px solid var(--border-color);
   background: white;
-  position: relative;
-  overflow: hidden;
 }
 .position-row .sym { font-weight: 700; }
 .position-row .desc { font-size: 12px; color: var(--text-secondary); }
 .position-row .right { text-align: right; }
 .position-row .val { font-weight: 600; }
 .position-row .pl { font-size: 12px; }
-
-.swipe-action {
-  position: absolute;
-  right: 0; top: 0; bottom: 0;
-  display: flex;
-  width: 160px;
-}
-.swipe-action button {
-  flex: 1;
-  border: none;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-.swipe-action .trade-btn { background: var(--schwab-blue); }
-.swipe-action .sell-btn { background: var(--red); }
 
 .hidden { display: none !important; }
