@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0b1f3a">
+    <title>Schwab</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app-root">
+        <div id="biometric-overlay" class="overlay hidden">
+            <div class="bio-content">
+                <div class="bio-icon"></div>
+                <h2>Authentication Required</h2>
+                <p id="bio-prompt">Use Face ID to unlock</p>
+                <button id="bio-btn" class="schwab-btn-primary">Authenticate</button>
+                <button id="bio-fallback" class="schwab-btn-link">Enter Password</button>
+            </div>
+        </div>
+
+        <div id="privacy-overlay" class="overlay hidden">
+            <div class="privacy-content">
+                <div class="schwab-logo-privacy"></div>
+                <p>Privacy Mode Enabled</p>
+            </div>
+        </div>
+
+        <div id="toast" class="toast hidden"></div>
+
+        <nav id="bottom-nav" class="hidden">
+            <button class="nav-item active" data-route="dashboard">
+                <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                <span>Accounts</span>
+            </button>
+            <button class="nav-item" data-route="positions">
+                <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4V5zm0 6h16v2H4v-2zm0 6h16v2H4v-2z"/></svg>
+                <span>Positions</span>
+            </button>
+            <button class="nav-item" data-route="trade">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 12h7v8h6v-8h7L12 2z"/></svg>
+                <span>Trade</span>
+            </button>
+            <button class="nav-item" data-route="transfers">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                <span>Move Money</span>
+            </button>
+            <button class="nav-item" data-route="markets">
+                <svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8v10H3z"/></svg>
+                <span>Markets</span>
+            </button>
+        </nav>
+
+        <main id="main-view"></main>
+    </div>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
