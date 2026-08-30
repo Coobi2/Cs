@@ -47,7 +47,6 @@ body, .scrollable {
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
-/* Native App Feel - No Scrollbars on main view */
 #main-view {
   flex: 1;
   overflow-y: auto;
