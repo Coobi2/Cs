@@ -7,14 +7,19 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0b1f3a">
     <title>Schwab</title>
+
+    <link rel="icon" type="image/png" href="unnamed.png">
+
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div id="app-root">
-        <div id="biometric-overlay" class="overlay hidden">
+        <!-- FIX: Removed 'hidden' class so auth overlay shows on launch -->
+        <div id="biometric-overlay" class="overlay">
             <div class="bio-content">
                 <div class="bio-icon"></div>
                 <h2>Authentication Required</h2>
