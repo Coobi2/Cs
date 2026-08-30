@@ -6,16 +6,14 @@ const UI = {
         t.innerText = msg;
         t.classList.remove('hidden');
         t.classList.add('show');
-        setTimeout(() => { 
-            t.classList.remove('show'); 
-            t.classList.add('hidden'); 
-        }, 3000);
+        setTimeout(() => { t.classList.remove('show'); t.classList.add('hidden'); }, 3000);
     },
 
     navigate: (route) => {
         UI.currentRoute = route;
         document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-        document.querySelector(`.nav-item[data-route="${route}"]`)?.classList.add('active');
+        const navBtn = document.querySelector(`.nav-item[data-route="${route}"]`);
+        if (navBtn) navBtn.classList.add('active');
 
         const main = document.getElementById('main-view');
         main.innerHTML = '';
@@ -45,20 +43,20 @@ const UI = {
                 </div>
                 
                 <div class="card" onclick="UI.navigate('positions')">
-                    <h3>Brokerage <span style="float:right; font-size:12px; color:var(--text-secondary)">****1234</span></h3>
-                    <div class="balance">$312,000.00</div>
+                    <h3>Brokerage <span style="float:right; font-size:12px; color:var(--text-secondary)">****4903</span></h3>
+                    <div class="balance">$149,059.93</div>
                     <div class="sub">Available Cash: $10,420.55</div>
                 </div>
 
                 <div class="card" onclick="UI.navigate('positions')">
-                    <h3>Roth IRA <span style="float:right; font-size:12px; color:var(--text-secondary)">****5678</span></h3>
-                    <div class="balance">$250,000.00</div>
+                    <h3>Roth IRA <span style="float:right; font-size:12px; color:var(--text-secondary)">****1012</span></h3>
+                    <div class="balance">$250,908.12</div>
                     <div class="sub">Available Cash: $0.00</div>
                 </div>
 
                 <div class="card" onclick="UI.navigate('transfers')">
-                    <h3>Checking <span style="float:right; font-size:12px; color:var(--text-secondary)">****9012</span></h3>
-                    <div class="balance">$60,000.00</div>
+                    <h3>Checking <span style="float:right; font-size:12px; color:var(--text-secondary)">****5994</span></h3>
+                    <div class="balance">$60,017.11</div>
                     <div class="sub">Available Cash: $60,000.00</div>
                 </div>
             </div>
@@ -67,15 +65,21 @@ const UI = {
     },
 
     renderPositions: () => {
+        // Calculate totals
+        const totalMV = API.state.positions.reduce((sum, p) => sum + (p.shares * p.price), 0);
+        const totalDayChange = API.state.positions.reduce((sum, p) => sum + (p.shares * (p.price - p.prevClose)), 0);
+        const totalGain = API.state.positions.reduce((sum, p) => sum + (p.shares * (p.price - p.costBasis)), 0);
+        const accountBalance = totalMV + API.state.accounts.find(a => a.id === 'brokerage').cash;
+
         let posHtml = `
             <div class="title-bar">
                 <h2>Positions</h2>
                 <span style="color:var(--schwab-blue); font-weight:600;">Filter</span>
             </div>
             <div class="mkt-idx-bar">
-                <div class="idx"><span>Account Value</span><div class="val">$562,000.00</div></div>
-                <div class="idx"><span>Day Gain</span><div class="val up">+$1,234.00</div></div>
-                <div class="idx"><span>Total Gain</span><div class="val up">+$42,000.00</div></div>
+                <div class="idx"><span>Account Value</span><div class="val">$${accountBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div></div>
+                <div class="idx"><span>Day Gain</span><div class="val ${totalDayChange >= 0 ? 'up' : 'down'}">${totalDayChange >= 0 ? '+' : ''}$${totalDayChange.toFixed(2)}</div></div>
+                <div class="idx"><span>Total Gain</span><div class="val ${totalGain >= 0 ? 'up' : 'down'}">${totalGain >= 0 ? '+' : ''}$${totalGain.toFixed(2)}</div></div>
             </div>
         `;
 
