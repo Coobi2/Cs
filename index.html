@@ -4,79 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0b1f3a">
-    <title>Schwab</title>
+    <meta name="format-detection" content="telephone=no">
+    <title>Schwab Simulator</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="unnamed.png">
     <link rel="apple-touch-icon" href="tallyup.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="app-root">
-        <!-- Login Screen -->
         <div id="login-screen" class="screen login-screen">
-            <div class="login-header">
-                <div class="schwab-logo-login"></div>
-                <h2>Welcome back</h2>
-                <p>Log in to your Schwab account</p>
-            </div>
-            
-            <div class="login-form">
-                <div class="input-group">
-                    <label>Login ID</label>
-                    <input type="email" id="login-email" placeholder="Email or Login ID" autocomplete="username" required>
+            <div class="login-shell">
+                <div class="login-header">
+                    <div class="brand-mark" aria-label="Schwab">S</div>
+                    <span class="eyebrow">Schwab simulator</span>
+                    <h1>Welcome back</h1>
+                    <p>Log in to your local investing simulator.</p>
                 </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
-                </div>
-                <button id="login-btn" class="schwab-btn-primary">Log In</button>
-                <div class="login-options">
-                    <a href="#">Forgot password?</a>
-                </div>
+
+                <form id="login-form" class="login-form">
+                    <div class="input-group">
+                        <label for="login-email">Login ID</label>
+                        <input type="text" id="login-email" placeholder="Email or Login ID" autocomplete="username" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" id="login-btn" class="primary-button login-button">Log In</button>
+                    <div class="login-options">
+                        <a href="#" id="forgot-password">Forgot password?</a>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <!-- Privacy Overlay -->
-        <div id="privacy-overlay" class="overlay hidden">
+        <div id="privacy-overlay" class="overlay hidden" aria-hidden="true">
             <div class="privacy-content">
-                <div class="schwab-logo-privacy"></div>
-                <p>Privacy Mode Enabled</p>
+                <div class="brand-mark">S</div>
+                <strong>Privacy Mode</strong>
+                <span>Return to the app to continue.</span>
             </div>
         </div>
 
-        <!-- Toast -->
-        <div id="toast" class="toast hidden"></div>
+        <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
-        <!-- Bottom Navigation -->
-        <nav id="bottom-nav" class="hidden">
+        <nav id="bottom-nav" class="bottom-nav hidden" aria-label="Primary">
             <button class="nav-item active" data-route="dashboard">
-                <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-                <span>Accounts</span>
+                <span class="nav-icon">⌂</span><span>Accounts</span>
             </button>
             <button class="nav-item" data-route="positions">
-                <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4V5zm0 6h16v2H4v-2zm0 6h16v2H4v-2z"/></svg>
-            <span>Positions</span>
+                <span class="nav-icon">▤</span><span>Positions</span>
             </button>
             <button class="nav-item" data-route="trade">
-                <svg viewBox="0 0 24 24"><path d="M12 2L2 12h7v8h6v-8h7L12 2z"/></svg>
-                <span>Trade</span>
+                <span class="nav-icon">＋</span><span>Trade</span>
             </button>
             <button class="nav-item" data-route="transfers">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-                <span>Move Money</span>
+                <span class="nav-icon">⇄</span><span>Move Money</span>
             </button>
             <button class="nav-item" data-route="markets">
-                <svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8v10H3z"/></svg>
-                <span>Markets</span>
+                <span class="nav-icon">↗</span><span>Markets</span>
             </button>
         </nav>
 
-        <main id="main-view"></main>
+        <main id="main-view" aria-live="polite"></main>
     </div>
+
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
