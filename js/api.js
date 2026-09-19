@@ -1,12 +1,12 @@
-const STORAGE_KEY = 'schwab-simulator-state-v2';
+const STORAGE_KEY = 'schwab-state2';
 
 const DEFAULT_STATE = {
     version: 2,
     selectedAccountId: 'brokerage',
     accounts: [
-        { id: 'brokerage', name: 'Brokerage', num: '****1234', cash: 10420.55 },
-        { id: 'ira', name: 'Roth IRA', num: '****5678', cash: 0.00 },
-        { id: 'checking', name: 'Schwab Bank Checking', num: '****9012', cash: 60000.00 }
+        { id: 'brokerage', name: 'Brokerage', num: '****0458', cash: 10420.55 },
+        { id: 'ira', name: 'Roth IRA', num: '****8472', cash: 419342.00 },
+        { id: 'checking', name: 'Schwab Bank Checking', num: '****9012', cash: 11390.45 }
     ],
     positions: [
         { sym: 'HCA', desc: 'HCA Healthcare', shares: 100, price: 317.50, prevClose: 315.00, costBasis: 280.00 },
@@ -20,14 +20,14 @@ const DEFAULT_STATE = {
     watchlists: [
         {
             name: 'My Watchlist',
-            items: ['AAPL', 'TSLA', 'NVDA', 'AMZN']
+            items: ['AAPL', 'TSLA', 'NVDA', 'GE']
         }
     ],
     quotes: {
         AAPL: { desc: 'Apple Inc.', price: 232.14, prevClose: 229.88 },
         TSLA: { desc: 'Tesla, Inc.', price: 337.81, prevClose: 332.10 },
         NVDA: { desc: 'NVIDIA Corporation', price: 177.35, prevClose: 175.92 },
-        AMZN: { desc: 'Amazon.com, Inc.', price: 232.88, prevClose: 229.72 }
+        AMZN: { desc: 'General Electric, Inc.', price: 232.88, prevClose: 229.72 }
     },
     transactions: [],
     orders: [],
