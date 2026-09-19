@@ -103,11 +103,47 @@ body::-webkit-scrollbar {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
-    overflow-y: auto;
+    overflow: hidden;
+    color: #eaf1fb;
+    background:
+        radial-gradient(120% 90% at 85% -10%, rgba(99, 102, 241, 0.28), transparent 60%),
+        radial-gradient(120% 90% at -10% 110%, rgba(0, 160, 223, 0.25), transparent 60%),
+        linear-gradient(180deg, #0b1f3a 0%, #0e2646 55%, #123055 100%);
+}
+
+/* Layer 1: light sweep passing over */
+.login-screen::before {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background: linear-gradient(115deg,
+        transparent 30%,
+        rgba(0, 160, 223, 0.14) 45%,
+        rgba(139, 92, 246, 0.12) 60%,
+        transparent 75%);
+    background-size: 220% 220%;
+    animation: loginSweep 12s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+/* Layer 2: drifting glow blob */
+.login-screen::after {
+    content: "";
+    position: absolute;
+    width: 75vmax;
+    height: 75vmax;
+    left: -28vmax;
+    top: -32vmax;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 160, 223, 0.28), transparent 70%);
+    box-shadow: 62vmax 48vmax 70px 16vmax rgba(139, 92, 246, 0.16);
+    animation: loginBlob 24s ease-in-out infinite alternate;
+    pointer-events: none;
 }
 
 .login-shell {
+    position: relative;
+    z-index: 1;
     width: min(100%, 390px);
     padding: 24px 0;
 }
@@ -122,14 +158,49 @@ body::-webkit-scrollbar {
     height: 64px;
     margin: 0 auto 18px;
     border-radius: 16px;
-    display: grid;
-    place-items: center;
     background: var(--schwab-blue);
-    color: #fff;
-    font-size: 34px;
-    line-height: 1;
-    font-weight: 800;
     box-shadow: 0 10px 24px rgba(0, 160, 223, 0.2);
+}
+
+.brand-mark img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+/* Logo: drops in from above the viewport, bounces, then floats */
+.login-header .brand-mark {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    margin: 0 auto 20px;
+    border-radius: 22px;
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.45),
+        0 0 40px rgba(0, 160, 223, 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    animation:
+        logoDrop 1s cubic-bezier(0.5, 0.05, 0.3, 1) 0.15s backwards,
+        logoFloat 5.5s ease-in-out 1.9s infinite;
+}
+
+/* Landing ring pulse on impact */
+.login-header .brand-mark::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2px solid rgba(0, 160, 223, 0.7);
+    pointer-events: none;
+    animation: logoRing 0.9s ease-out 0.95s both;
+}
+
+.login-header .eyebrow {
+    color: #7fb2e5;
+    opacity: 1;
+    animation: loginRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s backwards;
 }
 
 .login-header h1 {
@@ -137,16 +208,83 @@ body::-webkit-scrollbar {
     font-size: 28px;
     line-height: 1.08;
     letter-spacing: -0.03em;
+    color: #fff;
+    background: linear-gradient(90deg, #ffffff 20%, #8fd4ff 50%, #ffffff 80%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation:
+        loginRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.62s backwards,
+        loginShine 6s linear 1.8s infinite;
 }
 
 .login-header p {
     margin-top: 9px;
-    color: var(--text-secondary);
+    color: rgba(234, 241, 251, 0.65);
     font-size: 14px;
+    animation: loginRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.72s backwards;
 }
 
 .login-form {
     width: 100%;
+}
+
+/* Glass card around the form */
+.login-screen .login-form {
+    padding: 22px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    animation: loginRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.85s backwards;
+}
+
+/* Dark-theme overrides for the shared form styles */
+.login-screen .input-group label {
+    color: rgba(234, 241, 251, 0.75);
+}
+
+.login-screen .input-group input {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.07);
+    color: #eaf1fb;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.login-screen .input-group input::placeholder {
+    color: rgba(234, 241, 251, 0.35);
+}
+
+.login-screen .input-group input:focus {
+    border-color: rgba(0, 160, 223, 0.8);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 4px rgba(0, 160, 223, 0.18);
+}
+
+/* Keep autofill readable on the dark background */
+.login-screen .input-group input:-webkit-autofill {
+    -webkit-text-fill-color: #eaf1fb;
+    -webkit-box-shadow: 0 0 0 1000px #10294a inset;
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+.login-screen .login-button {
+    margin-top: 22px;
+    background: linear-gradient(120deg, #00a0df, #4f7cff 55%, #8b5cf6);
+    background-size: 200% 200%;
+    box-shadow: 0 12px 30px rgba(0, 160, 223, 0.35);
+    animation: loginBtnShift 7s ease infinite;
+}
+
+.login-screen .login-button:hover {
+    filter: brightness(1.07);
+}
+
+.login-screen .login-options a {
+    color: #6fc4f5;
 }
 
 .login-options {
@@ -160,6 +298,48 @@ body::-webkit-scrollbar {
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
+}
+
+@keyframes loginSweep {
+    from { background-position: 0% 50%; }
+    to   { background-position: 100% 50%; }
+}
+
+@keyframes loginBlob {
+    to { transform: translate(14vmax, 10vmax) scale(1.18); }
+}
+
+@keyframes logoDrop {
+    0%   { transform: translateY(-110vh); opacity: 0; }
+    10%  { opacity: 1; }
+    75%  { transform: translateY(14px); }
+    87%  { transform: translateY(-8px); }
+    94%  { transform: translateY(4px); }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes logoRing {
+    from { opacity: 0.9; transform: scale(0.7); }
+    to   { opacity: 0;   transform: scale(1.8); }
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+}
+
+@keyframes loginRise {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes loginShine {
+    to { background-position: 200% center; }
+}
+
+@keyframes loginBtnShift {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
 }
 
 /* Main shell */
@@ -1042,4 +1222,25 @@ body::-webkit-scrollbar {
     .position-right { min-width: 110px; }
     .nav-item { font-size: 8px; }
     .nav-icon { font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .login-screen::before,
+    .login-screen::after,
+    .login-header .brand-mark,
+    .login-header .brand-mark::after,
+    .login-header .eyebrow,
+    .login-header h1,
+    .login-header p,
+    .login-screen .login-form,
+    .login-screen .login-button {
+        animation: none !important;
+    }
+
+    /* Gradient-clipped text is invisible without the shine fallback — restore plain white */
+    .login-header h1 {
+        background: none;
+        -webkit-text-fill-color: initial;
+        color: #fff;
+    }
 }
