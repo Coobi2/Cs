@@ -1,20 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize authentication
-    Auth.init();
-    
-    // Navigation listeners
-    document.querySelectorAll('.nav-item').forEach(btn => {
-        btn.addEventListener('click', () => UI.navigate(btn.dataset.route));
-    });
+    try {
+        API.init();
+        Auth.init();
 
-    // Initialize API data streaming
-    API.init();
-    
-    // Error handling for any uncaught errors
-    window.addEventListener('error', (event) => {
-        console.error('Global error:', event.error);
-        UI.toast('An error occurred. Please refresh the page.');
-    });
-    
-    console.log('App initialized successfully');
+        document.querySelectorAll('.nav-item').forEach(button => {
+            button.addEventListener('click', () => UI.navigate(button.dataset.route));
+        });
+
+        window.addEventListener('error', event => {
+            console.error('Global error:', event.error || event.message);
+            UI.toast('Something went wrong. Please try again.');
+        });
+
+        window.addEventListener('unhandledrejection', event => {
+            console.error('Unhandled promise rejection:', event.reason);
+            UI.toast('Something went wrong. Please try again.');
+        });
+
+        UI.updateNavVisibility();
+        console.log('Schwab simulator initialized successfully');
+    } catch (error) {
+        console.error('App initialization failed:', error);
+    }
 });
