@@ -1,16 +1,16 @@
 :root {
     --schwab-blue: #00a0df;
-    --schwab-blue-dark: #007fbb;
+    --schwab-blue-dark: #4cc2ff;
     --schwab-navy: #0b1f3a;
-    --bg-color: #f5f7f9;
-    --card-bg: #ffffff;
-    --text-main: #111827;
-    --text-secondary: #667085;
-    --muted: #98a2b3;
-    --border-color: #e4e7ec;
-    --green: #138a47;
-    --red: #c9362b;
-    --shadow: 0 2px 14px rgba(16, 24, 40, 0.07);
+    --bg-color: #070d18;
+    --card-bg: rgba(255, 255, 255, 0.045);
+    --text-main: #eaf1fb;
+    --text-secondary: #8fa3c4;
+    --muted: #64789a;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --green: #34d399;
+    --red: #f87171;
+    --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
     --content-max: 480px;
     --page-pad: 18px;
     --nav-height: 68px;
@@ -57,10 +57,13 @@ button {
     margin: 0 auto;
     position: relative;
     overflow: hidden;
-    background: var(--bg-color);
     isolation: isolate;
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
+    background:
+        radial-gradient(120% 70% at 85% -10%, rgba(30, 58, 105, 0.55), transparent 60%),
+        radial-gradient(100% 60% at 0% 110%, rgba(13, 34, 66, 0.6), transparent 60%),
+        var(--bg-color);
 }
 
 #main-view {
@@ -68,7 +71,7 @@ button {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-bottom: calc(var(--nav-height) + 18px);
+    padding-bottom: calc(var(--nav-height) + 24px);
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
 }
@@ -89,7 +92,8 @@ body::-webkit-scrollbar {
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    opacity: 0.68;
+    color: var(--schwab-blue-dark);
+    opacity: 0.85;
 }
 
 /* Login */
@@ -345,7 +349,6 @@ body::-webkit-scrollbar {
 /* Main shell */
 .page {
     min-height: 100%;
-    background: var(--bg-color);
 }
 
 .content-shell {
@@ -358,12 +361,30 @@ body::-webkit-scrollbar {
 }
 
 .page-enter {
-    animation: pageEnter 180ms ease-out;
+    animation: pageEnter 220ms ease-out;
 }
 
 @keyframes pageEnter {
-    from { opacity: 0; transform: translateY(7px); }
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Shared entrance for page children (only when animating) */
+.page-enter .hero-topline,
+.page-enter .sticky-page-header,
+.page-enter .metric-strip,
+.page-enter .market-summary-grid {
+    animation: heroIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.page-enter .hero-topline { animation-delay: 0.05s; }
+.page-enter .sticky-page-header { animation-delay: 0.02s; }
+.page-enter .metric-strip,
+.page-enter .market-summary-grid { animation-delay: 0.1s; }
+
+@keyframes heroIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Dashboard */
@@ -372,11 +393,37 @@ body::-webkit-scrollbar {
 }
 
 .dashboard-hero {
+    position: relative;
+    overflow: hidden;
     width: 100%;
     color: #fff;
-    background: var(--schwab-navy);
     padding: 24px var(--page-pad) 20px;
     border-radius: 0 0 24px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background:
+        radial-gradient(120% 100% at 85% -20%, rgba(99, 102, 241, 0.35), transparent 55%),
+        radial-gradient(100% 90% at -10% 120%, rgba(0, 160, 223, 0.3), transparent 55%),
+        linear-gradient(180deg, #0d2140 0%, #0b1f3a 100%);
+}
+
+/* Slow light sweep over the hero */
+.dashboard-hero::before {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background: linear-gradient(115deg,
+        transparent 32%,
+        rgba(0, 160, 223, 0.1) 48%,
+        rgba(139, 92, 246, 0.09) 62%,
+        transparent 78%);
+    background-size: 220% 220%;
+    animation: loginSweep 16s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.dashboard-hero > * {
+    position: relative;
+    z-index: 1;
 }
 
 .hero-topline {
@@ -392,6 +439,12 @@ body::-webkit-scrollbar {
     line-height: 1.2;
 }
 
+.hero-side {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .hero-action,
 .icon-button {
     width: 38px;
@@ -400,6 +453,11 @@ body::-webkit-scrollbar {
     background: rgba(255,255,255,0.08);
     color: #fff;
     border-radius: 12px;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.icon-button:active {
+    transform: scale(0.94);
 }
 
 .net-worth {
@@ -408,12 +466,29 @@ body::-webkit-scrollbar {
     font-weight: 700;
     line-height: 1;
     letter-spacing: -0.045em;
+    background: linear-gradient(90deg, #ffffff 20%, #8fd4ff 50%, #ffffff 80%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation:
+        heroIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.12s backwards,
+        loginShine 6s linear 1.6s infinite;
 }
 
 .gain-line {
-    margin-top: 10px;
-    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 14px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 13px;
     font-weight: 600;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: heroIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.18s backwards;
 }
 
 .gain-positive { color: var(--green); }
@@ -424,6 +499,7 @@ body::-webkit-scrollbar {
 .portfolio-chart {
     height: 138px;
     margin: 18px -4px 0;
+    animation: heroIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.24s backwards;
 }
 
 .portfolio-chart svg {
@@ -444,6 +520,7 @@ body::-webkit-scrollbar {
     stroke-width: 3;
     stroke-linecap: round;
     stroke-linejoin: round;
+    filter: drop-shadow(0 8px 14px rgba(0, 160, 223, 0.4));
 }
 
 .chart-fill {
@@ -454,6 +531,27 @@ body::-webkit-scrollbar {
 .chart-dot {
     fill: #fff;
     stroke-width: 2;
+    filter: drop-shadow(0 0 8px rgba(0, 160, 223, 0.8));
+}
+
+/* Chart draws itself in on animated renders */
+.page-enter .chart-line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: chartDraw 1.3s cubic-bezier(0.4, 0, 0.2, 1) 0.35s forwards;
+}
+
+.page-enter .chart-fill {
+    opacity: 0;
+    animation: chartFill 0.8s ease 0.95s forwards;
+}
+
+@keyframes chartDraw {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes chartFill {
+    to { opacity: 1; }
 }
 
 .section-heading {
@@ -462,6 +560,7 @@ body::-webkit-scrollbar {
     justify-content: space-between;
     gap: 12px;
     margin-bottom: 12px;
+    animation: heroIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.26s backwards;
 }
 
 .section-heading h2,
@@ -484,6 +583,19 @@ body::-webkit-scrollbar {
     gap: 10px;
 }
 
+.page-enter .account-stack > * {
+    animation: heroIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.page-enter .account-stack > :nth-child(1) { animation-delay: 0.3s; }
+.page-enter .account-stack > :nth-child(2) { animation-delay: 0.36s; }
+.page-enter .account-stack > :nth-child(3) { animation-delay: 0.42s; }
+.page-enter .account-stack > :nth-child(4) { animation-delay: 0.48s; }
+
+.page-enter .quick-actions {
+    animation: heroIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.44s backwards;
+}
+
 .card,
 .account-card,
 .trade-quote-card,
@@ -498,13 +610,33 @@ body::-webkit-scrollbar {
     background: var(--card-bg);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .account-card {
     appearance: none;
+    position: relative;
     text-align: left;
     padding: 17px;
     cursor: pointer;
+    color: var(--text-main);
+    transition: transform 0.15s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.account-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 160, 223, 0.35);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.card-chevron {
+    position: absolute;
+    right: 16px;
+    top: 18px;
+    color: var(--muted);
+    font-size: 22px;
+    line-height: 1;
 }
 
 .card-topline {
@@ -512,6 +644,7 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    padding-right: 20px;
 }
 
 .card-topline h3 {
@@ -552,7 +685,9 @@ body::-webkit-scrollbar {
 
 .quick-action {
     border: 1px solid var(--border-color);
-    background: #fff;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 14px;
     padding: 14px 8px;
     color: var(--text-main);
@@ -561,6 +696,12 @@ body::-webkit-scrollbar {
     gap: 7px;
     font-size: 12px;
     font-weight: 600;
+    transition: transform 0.15s ease, border-color 0.2s ease;
+}
+
+.quick-action:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 160, 223, 0.35);
 }
 
 .quick-icon {
@@ -569,8 +710,9 @@ body::-webkit-scrollbar {
     border-radius: 10px;
     display: grid;
     place-items: center;
-    background: #e9f7fd;
-    color: var(--schwab-blue-dark);
+    background: linear-gradient(135deg, rgba(0, 160, 223, 0.25), rgba(139, 92, 246, 0.25));
+    border: 1px solid rgba(0, 160, 223, 0.3);
+    color: #7dd3fc;
     font-size: 18px;
 }
 
@@ -585,10 +727,10 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    background: rgba(255,255,255,0.96);
-    border-bottom: 1px solid var(--border-color);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(7, 13, 24, 0.82);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 .sticky-page-header h2 {
@@ -614,12 +756,17 @@ body::-webkit-scrollbar {
     width: 36px;
     height: 36px;
     flex: 0 0 auto;
-    border: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 11px;
-    background: #f2f4f7;
+    background: rgba(255, 255, 255, 0.08);
     color: var(--text-main);
     font-size: 27px;
     line-height: 1;
+    transition: background 0.2s ease;
+}
+
+.back-button:active {
+    transform: scale(0.94);
 }
 
 .header-link {
@@ -633,21 +780,23 @@ body::-webkit-scrollbar {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    background: var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .metric-strip > div {
     min-width: 0;
     padding: 13px 10px;
-    background: var(--schwab-navy);
+    background: rgba(11, 31, 58, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: #fff;
 }
 
 .metric-strip span {
     display: block;
     font-size: 10px;
-    color: rgba(255,255,255,0.65);
+    color: rgba(255,255,255,0.6);
 }
 
 .metric-strip strong {
@@ -668,9 +817,11 @@ body::-webkit-scrollbar {
 
 .position-list {
     overflow: hidden;
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .position-row {
@@ -682,13 +833,37 @@ body::-webkit-scrollbar {
     padding: 16px;
     border: 0;
     border-bottom: 1px solid var(--border-color);
-    background: #fff;
+    background: transparent;
     text-align: left;
     color: var(--text-main);
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.position-row:hover {
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .position-row:last-child {
     border-bottom: 0;
+}
+
+/* Staggered entrance on animated renders (opacity only, keeps :active transforms working) */
+.page-enter .position-row {
+    animation: rowIn 0.4s ease backwards;
+}
+
+.page-enter .position-row:nth-child(1) { animation-delay: 0.08s; }
+.page-enter .position-row:nth-child(2) { animation-delay: 0.12s; }
+.page-enter .position-row:nth-child(3) { animation-delay: 0.16s; }
+.page-enter .position-row:nth-child(4) { animation-delay: 0.2s; }
+.page-enter .position-row:nth-child(5) { animation-delay: 0.24s; }
+.page-enter .position-row:nth-child(6) { animation-delay: 0.28s; }
+.page-enter .position-row:nth-child(7) { animation-delay: 0.32s; }
+.page-enter .position-row:nth-child(8) { animation-delay: 0.36s; }
+.page-enter .position-row:nth-child(n+9) { animation-delay: 0.4s; }
+
+@keyframes rowIn {
+    from { opacity: 0; }
 }
 
 .position-main {
@@ -707,10 +882,11 @@ body::-webkit-scrollbar {
 }
 
 .shares-pill {
-    padding: 3px 7px;
+    padding: 3px 8px;
     border-radius: 999px;
-    background: #f2f4f7;
-    color: var(--text-secondary);
+    background: rgba(0, 160, 223, 0.14);
+    border: 1px solid rgba(0, 160, 223, 0.25);
+    color: #7dd3fc;
     font-size: 10px;
     font-weight: 600;
 }
@@ -745,7 +921,7 @@ body::-webkit-scrollbar {
 }
 
 .position-right .muted {
-    opacity: 0.85;
+    opacity: 0.75;
 }
 
 /* Quote */
@@ -763,12 +939,32 @@ body::-webkit-scrollbar {
     font-size: 42px;
     font-weight: 700;
     letter-spacing: -0.045em;
+    background: linear-gradient(90deg, #ffffff 20%, #8fd4ff 50%, #ffffff 80%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: loginShine 6s linear infinite;
 }
 
 .quote-change {
-    margin-top: 7px;
-    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 10px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 13px;
     font-weight: 600;
+}
+
+.quote-change.gain-positive {
+    background: rgba(52, 211, 153, 0.12);
+    border: 1px solid rgba(52, 211, 153, 0.28);
+}
+
+.quote-change.gain-negative {
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.28);
 }
 
 .quote-grid {
@@ -783,7 +979,7 @@ body::-webkit-scrollbar {
     padding: 15px;
     border: 1px solid var(--border-color);
     border-radius: 14px;
-    background: #fff;
+    background: var(--card-bg);
 }
 
 .quote-grid span,
@@ -805,11 +1001,13 @@ body::-webkit-scrollbar {
 .info-card,
 .details-card {
     display: grid;
-    gap: 1px;
+    gap: 10px;
     margin-top: 12px;
     box-shadow: none;
-    background: var(--border-color);
+    background: transparent;
     border: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 .primary-button,
@@ -825,9 +1023,17 @@ body::-webkit-scrollbar {
 
 .primary-button {
     margin-top: 16px;
-    background: var(--schwab-blue);
     color: #fff;
-    box-shadow: 0 8px 20px rgba(0,160,223,0.16);
+    background: linear-gradient(120deg, #00a0df, #4f7cff 55%, #8b5cf6);
+    background-size: 200% 200%;
+    animation: loginBtnShift 7s ease infinite;
+    box-shadow: 0 10px 26px rgba(0, 160, 223, 0.3);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.primary-button:hover {
+    filter: brightness(1.07);
+    box-shadow: 0 14px 32px rgba(0, 160, 223, 0.4);
 }
 
 .primary-button:active,
@@ -840,8 +1046,8 @@ body::-webkit-scrollbar {
 
 .secondary-button {
     margin-top: 18px;
-    border: 1px solid var(--border-color);
-    background: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
     color: var(--text-main);
 }
 
@@ -865,36 +1071,58 @@ body::-webkit-scrollbar {
     width: 100%;
     min-height: 50px;
     padding: 13px 14px;
-    border: 1px solid #d0d5dd;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 12px;
     outline: 0;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.06);
     color: var(--text-main);
     font-size: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.input-group input::placeholder,
+.large-input::placeholder,
+.symbol-input::placeholder {
+    color: var(--muted);
 }
 
 .input-group input:focus,
 .large-input:focus,
 .symbol-input:focus {
-    border-color: var(--schwab-blue);
-    box-shadow: 0 0 0 3px rgba(0,160,223,0.12);
+    border-color: rgba(0, 160, 223, 0.8);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 0 0 4px rgba(0, 160, 223, 0.16);
+}
+
+input:-webkit-autofill {
+    -webkit-text-fill-color: var(--text-main);
+    -webkit-box-shadow: 0 0 0 1000px #101b31 inset;
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+select.large-input option {
+    background: #0e1a30;
+    color: var(--text-main);
 }
 
 /* Trade */
 .market-pill {
-    padding: 6px 9px;
+    padding: 6px 10px;
     border-radius: 999px;
     font-size: 10px;
     font-weight: 650;
+    white-space: nowrap;
 }
 
 .market-open {
-    background: #e8f7ef;
-    color: var(--green);
+    background: rgba(52, 211, 153, 0.14);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    color: #4ade80;
 }
 
 .market-closed {
-    background: #f2f4f7;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: var(--text-secondary);
 }
 
@@ -907,7 +1135,8 @@ body::-webkit-scrollbar {
     grid-template-columns: 1fr 1fr;
     padding: 4px;
     border-radius: 14px;
-    background: #e9edf2;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-color);
 }
 
 .segment {
@@ -917,12 +1146,24 @@ body::-webkit-scrollbar {
     background: transparent;
     color: var(--text-secondary);
     font-weight: 650;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .segment.selected {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.12);
     color: var(--text-main);
-    box-shadow: 0 1px 5px rgba(16,24,40,0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Buy/Sell tint the active segment */
+#trade-side .segment.selected[data-side="BUY"] {
+    background: rgba(52, 211, 153, 0.16);
+    color: #4ade80;
+}
+
+#trade-side .segment.selected[data-side="SELL"] {
+    background: rgba(248, 113, 113, 0.16);
+    color: #f87171;
 }
 
 .trade-quote-card,
@@ -1005,19 +1246,33 @@ body::-webkit-scrollbar {
 .notice-card {
     display: grid;
     gap: 4px;
-    background: #f8fbfd;
+    background: rgba(0, 160, 223, 0.06);
+    border-color: rgba(0, 160, 223, 0.18);
     box-shadow: none;
     font-size: 12px;
+    color: var(--text-secondary);
 }
 
-.local-state-note span,
-.notice-card {
-    color: var(--text-secondary);
+.local-state-note strong {
+    color: var(--text-main);
 }
 
 .order-card {
     text-align: center;
+    position: relative;
+    overflow: hidden;
     padding: 26px 18px;
+}
+
+/* Gradient accent line across the top of the order card */
+.order-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 160, 223, 0.7), rgba(139, 92, 246, 0.7), transparent);
 }
 
 .order-direction {
@@ -1029,10 +1284,25 @@ body::-webkit-scrollbar {
     border-radius: 999px;
     font-size: 11px;
     font-weight: 750;
+    animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s backwards;
 }
 
-.order-buy { background: #e8f7ef; color: var(--green); }
-.order-sell { background: #fff0ee; color: var(--red); }
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.6); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.order-buy {
+    background: rgba(52, 211, 153, 0.14);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    color: #4ade80;
+}
+
+.order-sell {
+    background: rgba(248, 113, 113, 0.14);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: #f87171;
+}
 
 .order-title {
     margin-top: 14px;
@@ -1051,14 +1321,26 @@ body::-webkit-scrollbar {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    background: var(--border-color);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .market-summary-grid > div {
+    position: relative;
+    overflow: hidden;
     padding: 14px 8px;
-    background: var(--schwab-navy);
+    background: rgba(11, 31, 58, 0.6);
     color: #fff;
     text-align: center;
+}
+
+.market-summary-grid > div::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 160, 223, 0.6), transparent);
 }
 
 .market-summary-grid span,
@@ -1075,9 +1357,9 @@ body::-webkit-scrollbar {
 .empty-state {
     padding: 48px 24px;
     text-align: center;
-    border: 1px dashed #d0d5dd;
+    border: 1px dashed rgba(255, 255, 255, 0.16);
     border-radius: var(--radius-lg);
-    background: #fff;
+    background: var(--card-bg);
 }
 
 .empty-state.spacious {
@@ -1091,8 +1373,9 @@ body::-webkit-scrollbar {
     display: grid;
     place-items: center;
     border-radius: 16px;
-    background: #e9f7fd;
-    color: var(--schwab-blue-dark);
+    background: linear-gradient(135deg, rgba(0, 160, 223, 0.25), rgba(139, 92, 246, 0.25));
+    border: 1px solid rgba(0, 160, 223, 0.3);
+    color: #7dd3fc;
     font-size: 25px;
     font-weight: 700;
 }
@@ -1116,7 +1399,7 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: rgba(11,31,58,0.96);
+    background: rgba(7, 13, 24, 0.92);
     color: #fff;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -1142,11 +1425,14 @@ body::-webkit-scrollbar {
     position: absolute;
     left: 16px;
     right: 16px;
-    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 14px);
+    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 26px);
     z-index: 90;
     padding: 13px 15px;
     border-radius: 13px;
-    background: var(--schwab-navy);
+    background: rgba(13, 23, 44, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     color: #fff;
     font-size: 13px;
     text-align: center;
@@ -1161,23 +1447,24 @@ body::-webkit-scrollbar {
     transform: translateY(0);
 }
 
-/* Bottom nav: safe area is handled once at app root. */
+/* Bottom nav: floating glass pill */
 .bottom-nav {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 12px;
+    right: 12px;
+    bottom: calc(env(safe-area-inset-bottom) + 10px);
     z-index: 50;
     height: var(--nav-height);
     padding: 6px 4px 5px;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     align-items: center;
-    background: rgba(255,255,255,0.98);
-    border-top: 1px solid var(--border-color);
-    box-shadow: 0 -8px 20px rgba(16,24,40,0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(10, 17, 32, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 .nav-item {
@@ -1192,15 +1479,19 @@ body::-webkit-scrollbar {
     font-size: 9px;
     font-weight: 600;
     min-width: 0;
+    transition: color 0.2s ease;
 }
 
 .nav-icon {
-    width: 25px;
-    height: 25px;
+    width: 44px;
+    height: 26px;
     display: grid;
     place-items: center;
     font-size: 19px;
     line-height: 1;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .nav-item.active {
@@ -1208,12 +1499,15 @@ body::-webkit-scrollbar {
 }
 
 .nav-item.active .nav-icon {
+    background: linear-gradient(135deg, rgba(0, 160, 223, 0.2), rgba(139, 92, 246, 0.2));
+    border-color: rgba(0, 160, 223, 0.35);
+    color: #7dd3fc;
     font-weight: 750;
 }
 
 @media (min-width: 481px) {
     #app-root {
-        box-shadow: 0 0 30px rgba(16,24,40,0.09);
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
     }
 }
 
@@ -1225,20 +1519,18 @@ body::-webkit-scrollbar {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .login-screen::before,
-    .login-screen::after,
-    .login-header .brand-mark,
-    .login-header .brand-mark::after,
-    .login-header .eyebrow,
-    .login-header h1,
-    .login-header p,
-    .login-screen .login-form,
-    .login-screen .login-button {
-        animation: none !important;
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 
-    /* Gradient-clipped text is invisible without the shine fallback — restore plain white */
-    .login-header h1 {
+    /* Gradient-clipped text is invisible without its shine animation — restore solid color */
+    .login-header h1,
+    .net-worth,
+    .quote-price {
         background: none;
         -webkit-text-fill-color: initial;
         color: #fff;
